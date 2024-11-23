@@ -31,28 +31,65 @@ class MahasiswaResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('nim')
+                    ->label('NIM')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('nama_mahasiswa')
+                    ->label('Nama Mahasiswa')
+                    ->required(),
+                Forms\Components\FileUpload::make('foto')
+                    ->label('Foto')
+                    ->image()
+                    ->required(),
+                Forms\Components\TextInput::make('prodi')
+                    ->label('Program Studi')
+                    ->required(),
+                Forms\Components\Select::make('id_user')
+                    ->label('User')
+                    ->relationship('user', 'username')
+                    ->required(),
+                Forms\Components\Select::make('id_kelas')
+                    ->label('Kelas')
+                    ->relationship('kelas', 'nama_kelas')
+                    ->required(),
             ]);
     }
 
     public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+{
+    return $table
+        ->columns([
+            Tables\Columns\TextColumn::make('nim')
+                ->label('NIM')
+                ->searchable(),
+            Tables\Columns\TextColumn::make('nama_mahasiswa')
+                ->label('Nama Mahasiswa')
+                ->searchable(),
+            Tables\Columns\ImageColumn::make('foto')
+                ->label('Foto')
+                ->sortable(),
+            Tables\Columns\TextColumn::make('prodi')
+                ->label('Program Studi')
+                ->searchable(),
+            Tables\Columns\TextColumn::make('kelas.nama_kelas')
+                ->label('Kelas')
+                ->sortable(),
+        ])
+        ->filters([
+            // Tambahkan filter jika diperlukan
+        ])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]),
+        ]);
+}
+
 
     public static function getRelations(): array
     {
