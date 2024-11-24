@@ -10,10 +10,16 @@ class ListMahasiswas extends ListRecords
 {
     protected static string $resource = MahasiswaResource::class;
 
+    public function getTitle(): string
+    {
+        return 'Daftar Mahasiswa';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Data Mahasiswa')
         ];
     }
 }

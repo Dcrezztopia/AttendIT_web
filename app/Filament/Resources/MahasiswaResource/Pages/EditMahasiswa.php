@@ -10,6 +10,19 @@ class EditMahasiswa extends EditRecord
 {
     protected static string $resource = MahasiswaResource::class;
 
+    public function getTitle(): string
+    {
+        return 'Edit Data Mahasiswa';
+    }
+
+    protected function getActions(): array
+    {
+        return [
+            \Filament\Actions\CreateAction::make()
+                ->label('Simpan')
+        ];
+    }
+
     protected function getHeaderActions(): array
     {
         return [
