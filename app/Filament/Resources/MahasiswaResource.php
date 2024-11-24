@@ -43,6 +43,8 @@ class MahasiswaResource extends Resource
                 Forms\Components\FileUpload::make('foto')
                     ->label('Foto')
                     ->image()
+                    ->directory('uploads/mahasiswa')
+                    ->visibility('public')
                     ->nullable(),
                 Forms\Components\Select::make('prodi')
                     ->label('Program Studi')
@@ -52,8 +54,8 @@ class MahasiswaResource extends Resource
                     ->label('Kelas')
                     ->relationship('kelas', 'nama_kelas')
                     ->required(),
-                Forms\Components\Hidden::make('id_user') 
-                    ->default(fn () => auth()->id()) 
+                Forms\Components\Hidden::make('id_user')
+                    ->default(fn () => auth()->id())
                     ->required(),
 
                 // Form untuk User
