@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateDosen extends CreateRecord
 {
     protected static string $resource = DosenResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array 
+    { 
+        return DosenResource::beforeSave($data); 
+    }
 }
