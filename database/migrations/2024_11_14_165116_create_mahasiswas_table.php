@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nim')->unique();
             $table->string('nama_mahasiswa');
-            $table->string('foto');
+            $table->string('foto')->nullable();
             $table->string('prodi');
-            $table->foreignId('id_user')->constrained('users')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreignId('id_user')->constrained('users')->onDelete('restrict')->onUpdate('restrict')->nullable()->change();
             $table->foreignId('id_kelas')->constrained('kelas')->onDelete('restrict')->onUpdate('restrict');
 
             $table->timestamps();

@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateMahasiswa extends CreateRecord
 {
     protected static string $resource = MahasiswaResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array 
+    { 
+        return MahasiswaResource::beforeSave($data); 
+    }
 }
