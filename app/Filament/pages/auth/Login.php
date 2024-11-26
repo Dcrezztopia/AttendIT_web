@@ -34,6 +34,10 @@ class Login extends \Filament\Pages\Auth\Login
 
     protected function getCredentialsFromFormData(array $data): array
     {
+        if (!isset($data['username']) || !isset($data['password'])) {
+            throw new \InvalidArgumentException('Username and password are required.');
+        }
+    
         return [
             'username' => $data['username'],
             'password' => $data['password'],

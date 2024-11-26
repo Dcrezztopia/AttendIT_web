@@ -63,6 +63,7 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+            'key' => 'username', // Tambahkan key ini untuk override kolom default 'email'
         ],
 
         // 'users' => [
