@@ -32,8 +32,8 @@ class DosenResource extends Resource
         return $form
             ->schema([
                 // Form Dosen
-                Forms\Components\TextInput::make('nidn')
-                    ->label('NIDN')
+                Forms\Components\TextInput::make('kode_dosen')
+                    ->label('Kode Dosen')
                     ->required()
                     ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('nama_dosen')
@@ -70,8 +70,8 @@ class DosenResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nidn')
-                    ->label('NIDN')
+                Tables\Columns\TextColumn::make('kode_dosen')
+                    ->label('Kode Dosen')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('nama_dosen')

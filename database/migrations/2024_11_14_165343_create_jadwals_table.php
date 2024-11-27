@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('jadwals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_kelas')->constrained('kelas')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreignId('id_matkul')->constrained('mata_kuliahs')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreignId('id_dosen')->constrained('dosens')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreignId('id_matkul_dosen')->constrained('matkul_dosens')->onDelete('restrict')->onUpdate('restrict');
             $table->enum('hari', ['Senin','Selasa','Rabu','Kamis','Jumat',]);
             $table->time('waktu_mulai');
             $table->time('waktu_selesai');
-            $table->string('ruang_kelas');
+            $table->string('ruang_kelas', 50);
             $table->timestamps();
         });
     }

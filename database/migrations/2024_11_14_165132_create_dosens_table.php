@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('dosens', function (Blueprint $table) {
             $table->id();
-            $table->string('nidn')->unique();
-            $table->string('nama_dosen');
+            $table->string('kode_dosen', 20)->unique();
+            $table->string('nama_dosen', 100);
             $table->foreignId('id_user')->constrained('users')->onDelete('restrict')->onUpdate('restrict');
             $table->timestamps();
         });
