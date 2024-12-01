@@ -13,15 +13,13 @@ class MatkulDosen extends Model
         'id_matkul',
         'id_dosen',
     ];
-    public function dosens()
-    {
-        return $this->belongsToMany(Dosen::class, 'matkul_dosens', 'id_matkul', 'id_dosen')
-                    ->using(MatkulDosen::class);
-    }
+    public function dosen() 
+    { 
+        return $this->belongsTo(Dosen::class, 'id_dosen'); 
+    } 
 
-    public function mataKuliahs()
-    {
-        return $this->belongsToMany(MataKuliah::class, 'matkul_dosens', 'id_dosen', 'id_matkul')
-                    ->using(MatkulDosen::class);
+    public function mataKuliah() 
+    { 
+        return $this->belongsTo(MataKuliah::class, 'id_matkul'); 
     }
 }

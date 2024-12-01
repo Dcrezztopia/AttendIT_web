@@ -12,8 +12,7 @@ class Jadwal extends Model
     protected $table = 'jadwals';
     protected $fillable = [
         'id_kelas',
-        'id_matkul',
-        'id_dosen',
+        'id_matkul_dosen',
         'hari',
         'waktu_mulai',
         'waktu_selesai',
@@ -27,20 +26,29 @@ class Jadwal extends Model
     {
         return $this->belongsTo(Kelas::class, 'id_kelas');
     }
+    
+    /**
+     * Relasi ke model `MatkulDosen`
+     */
+    public function matkulDosen()
+    {
+        return $this->belongsTo(MatkulDosen::class, 'id_matkul_dosen')->with(['dosen', 'mataKuliah']);
+    }
 
     /**
      * Relasi ke model `MataKuliah`
      */
-    public function mataKuliah()
-    {
-        return $this->belongsTo(MataKuliah::class, 'id_matkul');
-    }
+    // public function mataKuliah()
+    // {
+    //     return $this->belongsTo(MataKuliah::class, 'id_matkul');
+    // }
 
     /**
      * Relasi ke model `Dosen`
      */
-    public function dosen()
-    {
-        return $this->belongsTo(Dosen::class, 'id_dosen');
-    }
+    // public function dosen()
+    // {
+    //     return $this->belongsTo(Dosen::class, 'id_dosen');
+    // }
+
 }
