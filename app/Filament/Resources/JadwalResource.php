@@ -93,6 +93,15 @@ class JadwalResource extends Resource
                     ->required()
                     ->maxLength(50)
                     ->label('Ruang Kelas'),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        1 => 'Aktif',
+                        0 => 'Tidak Aktif',
+                    ])
+                    ->default(1) // Default ke status "Aktif"
+                    ->required()
+                    ->label('Status'),
+                
             ]);
     }
 
@@ -118,13 +127,37 @@ class JadwalResource extends Resource
                     ->label('Waktu Selesai'),
                 Tables\Columns\TextColumn::make('ruang_kelas')
                     ->label('Ruang Kelas'),
+                Tables\Columns\BadgeColumn::make('status')
+                    ->label('Status')
+                    ->formatStateUsing(function ($state) {
+                        return $state == '1' ? 'Aktif' : 'Tidak Aktif';
+                    })
+                    ->sortable(),
+                
             ])
             ->filters([
                 //
+                Tables\Filters\SelectFilter::make('status')
+                    ->label('Status')
+                    ->options([
+                        '1' => 'Aktif',
+                        '0' => 'Tidak Aktif',
+                    ]),
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('toggleStatus')
+                    ->label(fn (Jadwal $record): string => $record->status == '1' ? 'Non Aktifkan' : 'Aktifkan')
+                    ->action(function (Jadwal $record) {
+                        $record->status = $record->status == '1' ? '0' : '1';
+                        $record->save();
+                    })
+                    ->icon(fn (Jadwal $record): string => $record->status == '1' ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle')
+                    ->requiresConfirmation()
+                    ->color(fn (Jadwal $record): string => $record->status == '1' ? 'danger' : 'success'),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

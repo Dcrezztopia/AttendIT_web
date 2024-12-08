@@ -5,11 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Jadwal extends Model
+class jadwal extends Model
 {
     use HasFactory;
 
     protected $table = 'jadwals';
+
+    const STATUS_TIDAK_AKTIF = '0';
+    const STATUS_AKTIF = '1';
+    
     protected $fillable = [
         'id_kelas',
         'id_matkul_dosen',
@@ -17,7 +21,14 @@ class Jadwal extends Model
         'waktu_mulai',
         'waktu_selesai',
         'ruang_kelas',
+        'status',
     ];
+
+    // Helper untuk status deskriptif
+    public function getStatusLabelAttribute()
+    {
+        return $this->status == self::STATUS_AKTIF ? 'Aktif' : 'Tidak Aktif';
+    }
     
     /**
      * Relasi ke model `Kelas`

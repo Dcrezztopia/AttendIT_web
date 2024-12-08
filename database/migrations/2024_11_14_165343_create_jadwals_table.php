@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_kelas')->constrained('kelas')->onDelete('restrict')->onUpdate('restrict');
             $table->foreignId('id_matkul_dosen')->constrained('matkul_dosens')->onDelete('restrict')->onUpdate('restrict');
-            $table->enum('hari', ['Senin','Selasa','Rabu','Kamis','Jumat',]);
+            $table->enum('hari', ['Senin','Selasa','Rabu','Kamis','Jumat']);
             $table->time('waktu_mulai');
             $table->time('waktu_selesai');
             $table->string('ruang_kelas', 50);
+            $table->enum('status', ['0','1']);
             $table->timestamps();
         });
     }
