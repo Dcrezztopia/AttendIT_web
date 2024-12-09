@@ -75,22 +75,32 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 
-    public function profile(Request $request)
+    public function getProfileMahasiswa(Request $request)
     {
         $user = $request->user();
 
-        // Include data mahasiswa jika user adalah mahasiswa
+        // Default response structure
+        $response = [
+            'user' => $user,
+            'mahasiswa' => null, // Tambahkan key mahasiswa dengan default null
+        ];
+
+        // Tambahkan data mahasiswa jika role adalah mahasiswa
         if ($user->role === 'mahasiswa') {
-            $mahasiswa = $user->mahasiswa()->first(); // Ambil data mahasiswa terkait
-            return response()->json([
-                'user' => $user,
-                'mahasiswa' => $mahasiswa,
-            ]);
+            $mahasiswa = $user->mahasiswa()->with('kelas')->first(); // Load relasi ke kelas
+            if ($mahasiswa) {
+                // Ubah struktur data untuk menampilkan nama_kelas
+                $response['mahasiswa'] = [
+                    'id' => $mahasiswa->id,
+                    'nama_mahasiswa' => $mahasiswa->nama_mahasiswa,
+                    'nim' => $mahasiswa->nim,
+                    'prodi' => $mahasiswa->prodi,
+                    'nama_kelas' => $mahasiswa->kelas->nama_kelas, // Ambil nama_kelas jika tersedia
+                ];
+            }
         }
 
-        return response()->json([
-            'user' => $user,
-        ]);
+        return response()->json($response);
     }
 
 }
