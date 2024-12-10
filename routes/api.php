@@ -25,6 +25,6 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/profile', [AuthController::class, 'profile']);
+    Route::get('/profile', [AuthController::class, 'getProfileMahasiswa']);
     Route::get('/jadwal', [JadwalController::class, 'getJadwal']);
 });

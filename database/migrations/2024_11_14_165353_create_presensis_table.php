@@ -17,9 +17,11 @@ return new class extends Migration
             $table->foreignId('id_mahasiswa')->constrained('mahasiswas')->onDelete('restrict')->onUpdate('restrict');
             $table->smallInteger('pertemuan_ke');
             $table->date('tanggal_presensi');
-            $table->enum('status_presensi', ['hadir', 'alpha']);
-            $table->string('tahun_ajaran');
+            $table->enum('status_presensi', ['hadir', 'alpha', 'izin', 'sakit']);
+            $table->string('tahun_ajaran', 9);
             $table->timestamps();
+            $table->unique(['id_jadwal', 'id_mahasiswa', 'pertemuan_ke']);
+
         });
     }
 
