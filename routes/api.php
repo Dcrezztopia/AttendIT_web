@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +29,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [AuthController::class, 'getProfileMahasiswa']);
     Route::get('/jadwal', [JadwalController::class, 'getJadwal']);
+    Route::get('/presensi/riwayat', [PresensiController::class, 'getPresensiHistories']);
+    Route::get('/presensi/statistik', [PresensiController::class, 'getPresensiStatistics']);
+    Route::post('/user/reset-password', [UserController::class, 'resetPassword']);
 });
