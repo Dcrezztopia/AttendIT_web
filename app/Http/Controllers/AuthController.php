@@ -17,10 +17,11 @@ class AuthController extends Controller
             'username' => 'required|string|max:255|unique:users',
             'role' => 'required|string|in:mahasiswa,admin,dosen', // Validasi role yang diperbolehkan
             'password' => 'required|string|min:3',
-            'nim' => 'required_if:role,mahasiswa|string|unique:mahasiswas', // NIM hanya wajib untuk mahasiswa
-            'nama_mahasiswa' => 'required_if:role,mahasiswa|string|max:255', // Nama mahasiswa
-            'prodi' => 'required_if:role,mahasiswa|string|max:255', // Prodi mahasiswa
-            'id_kelas' => 'required_if:role,mahasiswa|exists:kelas,id', // Validasi id_kelas
+            'nim' => 'required_if:role,mahasiswa|string|unique:mahasiswas',
+            'nama_mahasiswa' => 'required_if:role,mahasiswa|string|max:255',
+            'prodi' => 'required_if:role,mahasiswa|string|max:255',
+            'id_kelas' => 'required_if:role,mahasiswa|exists:kelas,id',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Add photo validation
         ]);
 
         // Buat user
@@ -33,18 +34,29 @@ class AuthController extends Controller
 
         // Jika role mahasiswa, buat data di tabel mahasiswa
         if ($validated['role'] === 'mahasiswa') {
+            // Handle photo upload
+            $fotoPath = null;
+            if ($request->hasFile('foto')) {
+                $foto = $request->file('foto');
+                $fotoPath = $foto->store('public/profile-photos');
+                // Convert storage path to URL path
+                $fotoPath = str_replace('public/', 'storage/', $fotoPath);
+            }
+
             $user->mahasiswa()->create([
                 'nim' => $validated['nim'],
                 'nama_mahasiswa' => $validated['nama_mahasiswa'],
                 'prodi' => $validated['prodi'],
                 'id_kelas' => $validated['id_kelas'],
+                'foto' => $fotoPath,
             ]);
         }
 
         return response()->json([
             'user' => $user,
             'token' => $user->createToken('mobile_app')->plainTextToken,
-            'message' => 'User registered successfully'
+            'message' => 'User registered successfully',
+            'foto_url' => $fotoPath,
         ], 201);
     }
 
@@ -54,17 +66,17 @@ class AuthController extends Controller
             'username' => 'required|string',
             'password' => 'required|string',
         ]);
-    
+
         if (!Auth::attempt($credentials)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-    
+
         $user = Auth::user();
         // $token = $user->createToken('mobile_app')->plainTextToken;
-    
+
         return response()->json([
             'user' => $user,
-            'token' => $user->createToken('mobile_app')->plainTextToken, 
+            'token' => $user->createToken('mobile_app')->plainTextToken,
         ], 200);
     }
 
@@ -78,24 +90,24 @@ class AuthController extends Controller
     public function getProfileMahasiswa(Request $request)
     {
         $user = $request->user();
+        $baseUrl = url('/');
 
         // Default response structure
         $response = [
             'user' => $user,
-            'mahasiswa' => null, // Tambahkan key mahasiswa dengan default null
+            'mahasiswa' => null,
         ];
 
-        // Tambahkan data mahasiswa jika role adalah mahasiswa
         if ($user->role === 'mahasiswa') {
-            $mahasiswa = $user->mahasiswa()->with('kelas')->first(); // Load relasi ke kelas
+            $mahasiswa = $user->mahasiswa()->with('kelas')->first();
             if ($mahasiswa) {
-                // Ubah struktur data untuk menampilkan nama_kelas
                 $response['mahasiswa'] = [
                     'id' => $mahasiswa->id,
                     'nama_mahasiswa' => $mahasiswa->nama_mahasiswa,
                     'nim' => $mahasiswa->nim,
                     'prodi' => $mahasiswa->prodi,
-                    'nama_kelas' => $mahasiswa->kelas->nama_kelas, // Ambil nama_kelas jika tersedia
+                    'nama_kelas' => $mahasiswa->kelas->nama_kelas,
+                    'foto_url' => $mahasiswa->foto ? asset($mahasiswa->foto) : null,
                 ];
             }
         }

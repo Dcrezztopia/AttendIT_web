@@ -37,7 +37,7 @@ class JadwalResource extends Resource
                     ->required()
                     ->label('Kelas'),
 
-                    // SELECT SATU-SATU TAPI OTOMATIS
+                // SELECT SATU-SATU TAPI OTOMATIS
                 // Forms\Components\Select::make('id_matkul_dosen')
                 //     ->label('Mata Kuliah')
                 //     ->required()
@@ -59,7 +59,7 @@ class JadwalResource extends Resource
                 //             });
                 //     }),
 
-                    //JADI 1
+                //JADI 1
                 Forms\Components\Select::make('id_matkul_dosen')
                     ->label('Mata Kuliah dan Dosen')
                     ->required()
@@ -101,7 +101,7 @@ class JadwalResource extends Resource
                     ->default(1) // Default ke status "Aktif"
                     ->required()
                     ->label('Status'),
-                
+
             ]);
     }
 
@@ -113,11 +113,11 @@ class JadwalResource extends Resource
                 Tables\Columns\TextColumn::make('kelas.nama_kelas')
                     ->label('Kelas')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('matkulDosen.id_matkul')
-                    ->label('Mata Kuliah')
+                Tables\Columns\TextColumn::make('matkulDosen.mataKuliah.kode_matkul')
+                    ->label('Kode Mata Kuliah')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('matkulDosen.id_dosen')
-                    ->label('Dosen')
+                Tables\Columns\TextColumn::make('matkulDosen.dosen.kode_dosen')
+                    ->label('Kode Dosen')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('hari')
                     ->label('Hari'),
@@ -133,7 +133,7 @@ class JadwalResource extends Resource
                         return $state == '1' ? 'Aktif' : 'Tidak Aktif';
                     })
                     ->sortable(),
-                
+
             ])
             ->filters([
                 //
@@ -149,14 +149,14 @@ class JadwalResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\Action::make('toggleStatus')
-                    ->label(fn (Jadwal $record): string => $record->status == '1' ? 'Non Aktifkan' : 'Aktifkan')
+                    ->label(fn(Jadwal $record): string => $record->status == '1' ? 'Non Aktifkan' : 'Aktifkan')
                     ->action(function (Jadwal $record) {
                         $record->status = $record->status == '1' ? '0' : '1';
                         $record->save();
                     })
-                    ->icon(fn (Jadwal $record): string => $record->status == '1' ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle')
+                    ->icon(fn(Jadwal $record): string => $record->status == '1' ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle')
                     ->requiresConfirmation()
-                    ->color(fn (Jadwal $record): string => $record->status == '1' ? 'danger' : 'success'),
+                    ->color(fn(Jadwal $record): string => $record->status == '1' ? 'danger' : 'success'),
 
             ])
             ->bulkActions([
