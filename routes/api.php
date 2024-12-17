@@ -29,6 +29,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [AuthController::class, 'getProfileMahasiswa']);
     Route::get('/jadwal', [JadwalController::class, 'getJadwal']);
+    Route::post('/presensi/submit', [PresensiController::class, 'store']);
     Route::get('/presensi/riwayat', [PresensiController::class, 'getPresensiHistories']);
     Route::get('/presensi/statistik', [PresensiController::class, 'getPresensiStatistics']);
     Route::post('/user/reset-password', [UserController::class, 'resetPassword']);

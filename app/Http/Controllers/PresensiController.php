@@ -71,4 +71,50 @@ class PresensiController extends Controller
 
         return response()->json(['statistics' => $statistics]);
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'id_jadwal' => 'required|exists:jadwals,id',
+            'pertemuan_ke' => 'required|integer|between:1,17',
+            'tanggal_presensi' => 'required|date',
+            'status_presensi' => 'required|in:hadir,alpha,izin,sakit',
+            'tahun_ajaran' => 'required|string|max:9'
+        ]);
+
+        try {
+            // Cek apakah sudah ada presensi untuk pertemuan ini
+            $existingPresensi = Presensi::where([
+                'id_jadwal' => $request->id_jadwal,
+                'id_mahasiswa' => Auth::user()->mahasiswa->id,
+                'pertemuan_ke' => $request->pertemuan_ke
+            ])->first();
+
+            if ($existingPresensi) {
+                return response()->json([
+                    'message' => 'Presensi untuk pertemuan ini sudah ada'
+                ], 422);
+            }
+
+            $presensi = Presensi::create([
+                'id_jadwal' => $request->id_jadwal,
+                'id_mahasiswa' => Auth::user()->mahasiswa->id,
+                'pertemuan_ke' => $request->pertemuan_ke,
+                'tanggal_presensi' => $request->tanggal_presensi,
+                'status_presensi' => $request->status_presensi,
+                'tahun_ajaran' => $request->tahun_ajaran
+            ]);
+
+            return response()->json([
+                'message' => 'Presensi berhasil disimpan',
+                'data' => $presensi
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal menyimpan presensi',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 } 
