@@ -76,7 +76,7 @@ class PresensiController extends Controller
     {
         $request->validate([
             'id_jadwal' => 'required|exists:jadwals,id',
-            'pertemuan_ke' => 'required|integer|between:1,17',
+            'pertemuan_ke' => 'required|integer|between:1,18',
             'tanggal_presensi' => 'required|date',
             'status_presensi' => 'required|in:hadir,alpha,izin,sakit',
             'tahun_ajaran' => 'required|string|max:9'
@@ -117,4 +117,4 @@ class PresensiController extends Controller
             ], 500);
         }
     }
-} 
+}
